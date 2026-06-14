@@ -1,0 +1,29 @@
+name: Deploy WAC API PROD
+
+on:
+  push:
+    branches:
+      - prod
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to PROD EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.PROD_EC2_HOST }}
+          username: ${{ secrets.PROD_EC2_USER }}
+          key: ${{ secrets.PROD_EC2_SSH_KEY }}
+          script: |
+            set -e
+            cd /home/ubuntu/bloomerapi
+            git fetch origin
+            git reset --hard origin/prod
+            source venv/bin/activate
+            pip install -r requirements.txt
+            sudo systemctl restart bloomerapi.service
