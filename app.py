@@ -86,7 +86,7 @@ register_mutate_routes(app)
 @app.route('/')
 def home():
     #logger.info("Hello, Madayaw UAT!")
-    return "Hello, WAC on EC2!"
+    return "Hello, WAC API on EC2!"
 
 # Initialize EventBus
 event_bus = EventBus()
